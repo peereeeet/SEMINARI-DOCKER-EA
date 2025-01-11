@@ -1,0 +1,30 @@
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    image: peereeeet/teachme-backend:latest
+    container_name: teachme-backend
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/BBDD
+    depends_on:
+      - mongodb
+
+  frontend:
+    image: peereeeet/teachme-frontend:latest
+    container_name: teachme-frontend
+    ports:
+      - "51139:51139" # Puerto expuesto del frontend
+    depends_on:
+      - backend
+
+volumes:
+  mongodb_data:
+    driver: local
